@@ -1,11 +1,14 @@
 import React from 'react'
 import {useSelector, useDispatch} from 'react-redux';
-import {removeService, EditService, clearService} from '../actions/actionCreators';
+import {removeService, EditService, clearService, filterService} from '../actions/actionCreators';
 
 function ServiceList() {
   const items = useSelector(state => state.serviceList);
   const formState = useSelector(state => state.serviceAdd);
   const dispatch = useDispatch();
+
+
+
 
   const handleRemove = id => {
     // очищаем форму ввода если удаляем редактируемый элемент
@@ -20,17 +23,28 @@ function ServiceList() {
     dispatch(EditService(name,price));
   }
 
+  const filterHandler = (evt) => {
+    dispatch(filterService(evt.target.value));
+  }
+
+
   return (
+    <>
+    <span>Фильтр</span>
+    <input name="filter" onChange={filterHandler}></input>
     <ul>
       {items.map(o => (
         <li key={o.id}>
           {o.name} {o.price}
           <button onClick={() => handleRemove(o.id)}>✕</button>
           <button onClick={() => handleEdit(o.name, o.price)}>✎</button>
-        </li>
-      ))}
+        </li>))
+      }
     </ul>
+    </>
   )
 }
 
-export default ServiceList
+
+
+export default ServiceList;
